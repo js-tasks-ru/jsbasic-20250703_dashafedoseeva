@@ -1,4 +1,4 @@
 function sum(m, n) {
-  sum = m + n;
-  return sum;
+  let amount = m + n;
+  return amount;
 }
