@@ -7,7 +7,5 @@ function camelize(str) {
       return item.charAt(0).toUpperCase() + item.slice(1);
     }
   });
-  let newstr = result.join('')
-  return newstr;
-
+  return result.join('')
 }
