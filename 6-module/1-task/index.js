@@ -48,3 +48,5 @@ class UserTable {
     });
   }
 }
+
+export default UserTable;
