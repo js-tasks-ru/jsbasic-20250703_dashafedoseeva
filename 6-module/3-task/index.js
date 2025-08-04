@@ -5,7 +5,8 @@ function initCarousel(elem) {
   const carouselInner = elem.querySelector('.carousel__inner');
   const carouselSlides = elem.querySelectorAll('.carousel__slide');
   const totalSlides = carouselSlides.length;
-  const slideWidth = carouselSlides[0].offsetWidth; // получаем реальную ширину слайда
+  // Получаем ширину слайда, если в DOM - реальную, иначе - 500px по умолчанию
+  const slideWidth = carouselSlides[0].offsetWidth || 500;
   let currentIndex = 0; //храним номер текущего слайда в карусели.
 
   function updateButtons() {
@@ -67,6 +68,8 @@ export default class Carousel {
         </div>
       </div>
     `);
+
+    // Обработчик кликов по кнопкам +
     this.elem.addEventListener('click', (event) => {
       const button = event.target.closest('.carousel__button');
       if (!button) return;
@@ -81,12 +84,10 @@ export default class Carousel {
 
       this.elem.dispatchEvent(productAddEvent);
     });
-    
-    // Инициализируем карусель после добавления в DOM
-    // Небольшая задержка нужна для тестов, чтобы они успели установить размеры
-    setTimeout(() => {
-      initCarousel(this.elem);
-    }, 100);
+
+    // Инициализируем карусель сразу
+    // В тестах и браузере элемент будет добавлен в DOM после создания(про это найти, что почитать, не понятно)
+    initCarousel(this.elem);
   }
 
 }
