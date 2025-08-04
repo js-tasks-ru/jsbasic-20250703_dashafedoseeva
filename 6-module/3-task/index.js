@@ -5,7 +5,7 @@ function initCarousel(elem) {
   const carouselInner = elem.querySelector('.carousel__inner');
   const carouselSlides = elem.querySelectorAll('.carousel__slide');
   const totalSlides = carouselSlides.length;
-  const slideWidth = carouselSlides[0].offsetWidth; //получаем ширину слайда
+  const slideWidth = carouselSlides[0].offsetWidth; // получаем реальную ширину слайда
   let currentIndex = 0; //храним номер текущего слайда в карусели.
 
   function updateButtons() {
@@ -83,11 +83,10 @@ export default class Carousel {
     });
     
     // Инициализируем карусель после добавления в DOM
-    // setTimeout с 0 задержкой гарантирует, что элемент будет в DOM
-    // когда выполнится initCarousel(вообще не понимаю, почему так, нужно что то почитать)
+    // Небольшая задержка нужна для тестов, чтобы они успели установить размеры
     setTimeout(() => {
       initCarousel(this.elem);
-    }, 0);
+    }, 100);
   }
 
 }
