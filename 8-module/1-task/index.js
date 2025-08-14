@@ -26,7 +26,7 @@ export default class CartIcon {
       this.elem.classList.add('shake');
       this.elem.addEventListener('transitionend', () => {
         this.elem.classList.remove('shake');
-      }, {once: true});
+      }, { once: true });
 
     } else {
       this.elem.classList.remove('cart-icon_visible');
@@ -39,6 +39,50 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    // ваш код ...
+    // Если иконка корзины не видима (нет товаров или display:none)
+    if (!this.elem.offsetWidth || !this.elem.offsetHeight) {
+      return;
+    }
+      // Мобильная версия — сбрасываем стили
+      if (document.documentElement.clientWidth <= 767) {
+        Object.assign(this.elem.style, {
+          position: '',
+          top: '',
+          left: '',
+          zIndex: ''
+        });
+        return;
+      }
+
+      // Запоминаем начальное положение иконки при первом вызове
+      if (!this.initialTopCoord) {
+        this.initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
+      }
+
+      if (window.pageYOffset > this.initialTopCoord) {
+        // вычисляем отступ слева
+        let leftIndent = Math.min(
+          document.querySelector('.container').getBoundingClientRect().right + 20,
+          document.documentElement.clientWidth - this.elem.offsetWidth - 10
+        ) + 'px';
+
+        Object.assign(this.elem.style, {
+          position: 'fixed',
+          top: '50px',
+          zIndex: 1000,
+          left: leftIndent
+        });
+      } else {
+        // возвращаем в исходное состояние
+        Object.assign(this.elem.style, {
+          position: '',
+          top: '',
+          left: '',
+          zIndex: ''
+        });
+      }
+
+    }
+
   }
-}
+
