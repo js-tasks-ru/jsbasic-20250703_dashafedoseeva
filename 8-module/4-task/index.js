@@ -33,8 +33,9 @@ export default class Cart {
     cartItem.count += amount;
 
     if (cartItem.count === 0) {
+      // Удаляем из корзины и передаем в onProductUpdate информацию о том, какой продукт удалён
       this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
-      cartItem = null;
+      cartItem = { product: { id: productId }, count: 0 };
     }
 
     this.onProductUpdate(cartItem);
@@ -153,14 +154,23 @@ export default class Cart {
       return;
     }
 
-    if (cartItem) {
+    if (cartItem && cartItem.product && cartItem.product.id) {
       const productId = cartItem.product.id;
       const productElem = modalBody.querySelector(`[data-product-id="${productId}"]`);
       if (productElem) {
-        const countElem = productElem.querySelector('.cart-counter__count');
-        const priceElem = productElem.querySelector('.cart-product__price');
-        countElem.textContent = cartItem.count;
-        priceElem.textContent = `€${(cartItem.product.price * cartItem.count).toFixed(2)}`;
+        if (cartItem.count === 0) {
+          // удалить карточку товара из модалки
+          productElem.remove();
+        } else {
+          const countElem = productElem.querySelector('.cart-counter__count');
+          const priceElem = productElem.querySelector('.cart-product__price');
+          countElem.textContent = String(cartItem.count);
+          // Найдём исходное описание товара, чтобы взять актуальную цену
+          const itemInfo = this.cartItems.find(i => i.product.id === productId);
+          if (itemInfo) {
+            priceElem.textContent = `€${(itemInfo.product.price * itemInfo.count).toFixed(2)}`;
+          }
+        }
       }
     }
 
