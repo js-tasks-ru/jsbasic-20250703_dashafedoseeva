@@ -192,7 +192,11 @@ export default class Cart {
       method: 'POST',
       body: formData,
     });
-    await response.json();
+    try {
+      await response.json();
+    } catch (e) {
+      // Игнорируем возможную ошибку парсинга, если тело пустое
+    }
 
     // успех
     document.querySelector('.modal__title').textContent = 'Success!';
