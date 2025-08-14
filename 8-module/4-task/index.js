@@ -199,7 +199,10 @@ export default class Cart {
     }
 
     // успех
-    document.querySelector('.modal__title').textContent = 'Success!';
+    const modalEl = document.querySelector('.modal');
+    if (!modalEl) return;
+    const titleEl = modalEl.querySelector('.modal__title');
+    if (titleEl) titleEl.textContent = 'Success!';
     this.cartItems = [];
     this.cartIcon.update(this);
 
@@ -210,7 +213,10 @@ export default class Cart {
     <img src="/assets/images/delivery.gif">
   </p>
 </div>`);
-    document.querySelector('.modal__body').innerHTML = '';
-    document.querySelector('.modal__body').append(successBody);
+    const bodyEl = modalEl.querySelector('.modal__body');
+    if (bodyEl) {
+      bodyEl.innerHTML = '';
+      bodyEl.append(successBody);
+    }
   }
 }
