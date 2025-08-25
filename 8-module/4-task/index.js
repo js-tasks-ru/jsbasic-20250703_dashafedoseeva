@@ -143,14 +143,13 @@ export default class Cart {
       return;
     }
 
-    const modal = document.querySelector('.modal');
+    const modal = this.modal.elem
     if (!modal) return;
     const modalBody = modal.querySelector('.modal__body');
 
     if (this.isEmpty()) {
-      // закрыть модальное окно
-      modal.remove();
-      document.body.classList.remove('is-modal-open');
+      this.modal.close();
+      this.modal = null;
       return;
     }
 
@@ -188,35 +187,31 @@ export default class Cart {
     submitButton.classList.add('is-loading');
 
     const formData = new FormData(cartForm);
-    const response = await fetch('https://httpbin.org/post', {
-      method: 'POST',
-      body: formData,
-    });
     try {
+      const response = await fetch('https://httpbin.org/post', {
+        method: 'POST',
+        body: formData,
+      });
       await response.json();
     } catch (e) {
       // Игнорируем возможную ошибку парсинга, если тело пустое
     }
 
     // успех
-    const modalEl = document.querySelector('.modal');
-    if (!modalEl) return;
-    const titleEl = modalEl.querySelector('.modal__title');
-    if (titleEl) titleEl.textContent = 'Success!';
-    this.cartItems = [];
-    this.cartIcon.update(this);
+    if (this.modal) {
+      this.modal.setTitle('Success!');
+      this.cartItems = [];
+      this.cartIcon.update(this);
 
-    const successBody = createElement(`<div class="modal__body-inner">
-  <p>
-    Order successful! Your order is being cooked :) <br>
-    We’ll notify you about delivery time shortly.<br>
-    <img src="/assets/images/delivery.gif">
-  </p>
-</div>`);
-    const bodyEl = modalEl.querySelector('.modal__body');
-    if (bodyEl) {
-      bodyEl.innerHTML = '';
-      bodyEl.append(successBody);
+      const successBody = createElement(`<div class="modal__body-inner">
+    <p>
+      Order successful! Your order is being cooked :) <br>
+      We’ll notify you about delivery time shortly.<br>
+      <img src="/assets/images/delivery.gif">
+    </p>
+  </div>`);
+
+      this.modal.setBody(successBody);
     }
   }
 }
